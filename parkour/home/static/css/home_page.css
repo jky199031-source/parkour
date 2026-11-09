@@ -1,0 +1,170 @@
+  /* header */
+  .logo img {
+    height: 40px;
+    width:auto;
+    display:block
+  }
+  /* ===== header et footer ===== */
+.site-header,
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;  
+  gap: 32px;
+  height: 72px;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.site-header a,
+.site-footer a {
+  text-decoration: none;
+  color: inherit;
+}
+.site-header nav {
+  margin-left: auto;
+}
+
+.site-header nav ul {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.site-footer .logo + a {
+  margin-left: auto;     
+}
+
+.btn-contact {
+  margin-left: auto;
+  padding: 8px 20px;
+  border-radius: 8px;
+  background: #a020f0;
+  color: #fff !important;
+  transition: transform 0.2s;
+}
+
+.btn-contact:hover {
+  transform: rotate(-3deg) scale(1.05);
+}
+
+/* ===== effet graffiti au survol ===== */
+.site-header nav a,
+.site-footer a:not(.logo):not(.btn-contact) {
+  position: relative;
+  z-index: 0;                       
+  padding: 4px 10px;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  letter-spacing: 0.5px;
+  transition: color 0.2s, transform 0.2s;
+}
+
+/* le « coup de bombe » : un trait violet qui se peint de gauche à droite */
+.site-header nav a::before,
+.site-footer a:not(.logo):not(.btn-contact)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #a020f0;
+  border-radius: 4px 10px 5px 12px;
+  transform-origin: left center;
+  transform: scaleX(0) skewX(-12deg) rotate(-2deg);
+  transition: transform 0.25s ease-out;
+}
+
+.site-header nav a:hover,
+.site-footer a:not(.logo):not(.btn-contact):hover {
+  color: #fff;
+  transform: rotate(-2deg);
+  text-shadow: 2px 2px 0 #000;      /* ombre noire façon tag */
+}
+
+.site-header nav a:hover::before,
+.site-footer a:not(.logo):not(.btn-contact):hover::before {
+  transform: scaleX(1) skewX(-12deg) rotate(-2deg);
+}
+  /* homepage */
+  .parkour {
+    position: relative;
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size:cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .parkour-content {
+    position: relative;
+    max-width: 700px;
+    padding: 2rem;
+    color: wheat ;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .parkour-content h1 {
+    font-family: "Permanent Marker", Arial, sans-serif;
+    font-size:2.5rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 3px 3px 0 #a020f0;
+  }
+  .parkour-content p {
+    font-family: "Permanent Marker", Arial, sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  }
+
+
+  @media (max-width: 768px) {
+    .site-header,
+    .site-footer {
+      height: auto;                     /* hauteur s'adapte */
+      flex-wrap: wrap;                  /* vont à la ligne */
+      justify-content: center;
+      padding: 12px 16px;
+      gap: 12px;
+    }
+    .site-header nav,
+    .site-footer nav {
+      margin-left: 0;
+      width: 100%;
+  }
+
+   .site-header nav ul,
+   .site-footer nav {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 16px;
+  }
+
+   .btn-contact {
+     margin-left: 0;
+  }
+
+   .parkour-content {
+     margin: 1rem;
+     padding: 1.25rem;
+  }
+
+   .parkour-content h1 {
+     font-size: 1.8rem;
+  }
+
+   .parkour-content p {
+     font-size: 1rem;
+  }
+}
+
+/* images toujours contenues dans leur conteneur */
+img {
+  max-width: 100%;
+  height: auto;
+  }
