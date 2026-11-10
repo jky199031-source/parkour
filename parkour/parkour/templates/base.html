@@ -9,11 +9,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="{% static 'css/home_page.css' %}">
+<script>
+  try {
+    if (sessionStorage.getItem('paint')) {
+      sessionStorage.removeItem('paint');
+      document.documentElement.classList.add('paint-arriving');
+    }
+  } catch (e) {}
+</script>
   {% block extra_css %}{% endblock %}
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
-
+<div class="paint-overlay" aria-hidden="true">
+  <div class="paint-layer"></div>
+  <div class="paint-layer"></div>
+  <div class="paint-layer"></div>
+  <img class="paint-logo" src="{% static 'img/logo.png' %}" alt="">
+</div>
 <header class="site-header">
         <a href="/" class="logo">
              <img src="{% static "img/logo.png" %}" alt="Logo Parkour">
@@ -35,12 +48,102 @@
     <a href="/" class="logo">
         <img src="{% static "img/logo.png" %}" alt="Logo Parkour">
     </a>
-    <a href="social">Réseaux sociaux</a>
+    <a href="/social/">Réseaux sociaux</a>
     <a href="/a-propos/">À propos</a>
     <a href="/mentions-legales/">Mentions légales</a>
     <a href="/contact/" class="btn-contact">Contact</a>
   </footer>
+<script>
+  (function () {
+    var root = document.documentElement;
+    var overlay = document.querySelector('.paint-overlay');
+    var layers = [].slice.call(document.querySelectorAll('.paint-layer'));
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Longueur des coulures de chaque couche (en % de la hauteur de l'écran)
+    var LENS = [
+      [18, 6, 26, 10, 22, 4, 28, 12],
+      [10, 24, 8, 28, 14, 22, 6, 20],
+      [26, 12, 20, 6, 24, 10, 16, 28]
+    ];
+
+    // Dessine une forme avec 8 coulures le long du bord bas
+    function build(topY, baseY, lens) {
+      var N = 8, w = 100 / N;
+      var pts = ['0% ' + topY + '%', '100% ' + topY + '%'];
+      for (var k = N - 1; k >= 0; k--) {
+        var x1 = (k + 1) * w, x0 = k * w, y = baseY + (lens[k] || 0);
+        pts.push(x1 + '% ' + baseY + '%');
+        pts.push((x1 - w * 0.2) + '% ' + y + '%');
+        pts.push((x0 + w * 0.2) + '% ' + y + '%');
+        pts.push(x0 + '% ' + baseY + '%');
+      }
+      return 'polygon(' + pts.join(',') + ')';
+    }
+
+    // Trois états : vide (en haut), plein (écran couvert), parti (en bas)
+    function shape(state, i) {
+      if (state === 'full') return build(0, 102, LENS[i]);
+      if (state === 'gone') return build(135, 135, []);
+      return build(0, 0, []);
+    }
+
+    function apply(state, animate, reverse) {
+      layers.forEach(function (l, i) {
+        var delay = (reverse ? 2 - i : i) * 0.12;
+        l.style.transition = animate
+          ? 'clip-path 0.6s cubic-bezier(0.7, 0, 0.3, 1) ' + delay + 's'
+          : 'none';
+        l.style.clipPath = shape(state, i);
+      });
+    }
+
+    if (root.classList.contains('paint-arriving')) {
+      // Arrivée : l'écran est couvert, puis la peinture s'écoule vers le bas
+      apply('full', false);
+      void layers[0].offsetWidth;                 // force le navigateur à appliquer l'état
+      root.classList.remove('paint-arriving');
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { apply('gone', true, true); });
+      });
+    } else {
+      apply('empty', false);
+    }
+
+    // Retour arrière du navigateur : on retire la peinture restée à l'écran
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) {
+        overlay.classList.remove('is-covering');
+        apply('empty', false);
+      }
+    });
+
+    // Clic sur un lien interne
+    document.addEventListener('click', function (e) {
+      if (reduce) return;
+      var a = e.target.closest('a');
+      if (!a || !a.href) return;
+      if (e.defaultPrevented || e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (a.target && a.target !== '_self') return;
+      if (a.hasAttribute('download')) return;
+
+     var url = new URL(a.href, location.href);
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return;   // mailto:, tel: ...
+      var internal = url.origin === location.origin;
+      if (internal && url.pathname === location.pathname && url.search === location.search) return;
+
+      e.preventDefault();
+      if (internal) {
+      try { sessionStorage.setItem('paint', '1'); } catch (err) {}
+    }
+
+      overlay.classList.add('is-covering');
+      apply('full', true, false);
+      setTimeout(function () { location.href = url.href; }, 1000);
+    });
+  })();
+</script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

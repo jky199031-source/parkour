@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags wagtailembeds_tags %}
+
+{% block content %}
+<article class="cours-detail">
+  <a href="{% pageurl page.get_parent %}" class="cours-retour">&larr; Tous les cours</a>
+
+  <h1>{{ page.title }}</h1>
+
+  {% if page.intro %}
+    <p class="cours-intro">{{ page.intro }}</p>
+  {% endif %}
+
+  {% if page.video_url %}
+    <div class="cours-video">
+      {% embed page.video_url %}
+    </div>
+  {% endif %}
+
+  <ul class="cours-infos">
+    {% if page.niveau %}<li><strong>Niveau :</strong> {{ page.niveau }}</li>{% endif %}
+    {% if page.horaires %}<li><strong>Horaires :</strong> {{ page.horaires }}</li>{% endif %}
+    {% if page.lieu %}<li><strong>Lieu :</strong> {{ page.lieu }}</li>{% endif %}
+  </ul>
+
+  <div class="cours-body">
+    {{ page.body|richtext }}
+  </div>
+
+  {% if page.lien_inscription %}
+    <a href="{{ page.lien_inscription }}" class="carousel-link">
+      S'inscrire
+    </a>
+  {% endif %}
+</article>
+{% endblock content %}

@@ -1,7 +1,57 @@
 {% extends "base.html" %}
 {% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
 
 {% block content %}
 
+<h1 class="cours-titre">{{ page.title }}</h1>
+
+{% if page.blocs.all %}
+<div class="carousel">
+  <button class="carousel-btn prev" type="button" aria-label="Bloc précédent">&#10094;</button>
+
+  <div class="carousel-track">
+    {% for bloc in page.blocs.all %}
+      <article class="carousel-item">
+        {% if bloc.image %}
+          {% image bloc.image fill-600x400 %}
+        {% endif %}
+        {% if bloc.titre %}
+          <h2 class="carousel-titre">{{ bloc.titre }}</h2>
+        {% endif %}
+        <div class="carousel-text">
+          {{ bloc.texte|richtext }}
+
+           {% if bloc.cours_page %}
+            <a href="{% pageurl bloc.cours_page %}" class="carousel-link">
+              {{ bloc.texte_lien }}
+            </a>
+           {% elif bloc.lien %}
+            <a href="{{ bloc.lien }}" class="carousel-link">
+              {{ bloc.texte_lien }}
+            </a>
+          {% endif %}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+
+  <button class="carousel-btn next" type="button" aria-label="Bloc suivant">&#10095;</button>
+</div>
+{% endif %}
 
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+  const track = document.querySelector(".carousel-track");
+  if (track) {
+    const step = () => track.querySelector(".carousel-item").offsetWidth + 24;
+    document.querySelector(".carousel-btn.next")
+      .addEventListener("click", () => track.scrollBy({ left: step(), behavior: "smooth" }));
+    document.querySelector(".carousel-btn.prev")
+      .addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
+  }
+</script>
+{% endblock extra_js %}

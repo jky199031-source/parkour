@@ -1,6 +1,18 @@
+  body{
+    margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+  
+main {
+  flex: 1;          /* le contenu occupe l'espace, le footer reste en bas */
+}
+
   /* header */
   .logo img {
-    height: 40px;
+    height: 85px;
     width:auto;
     display:block
   }
@@ -86,6 +98,58 @@
 .site-footer a:not(.logo):not(.btn-contact):hover::before {
   transform: scaleX(1) skewX(-12deg) rotate(-2deg);
 }
+
+  /* effet peinture en cliquant sur les liens */
+  /* ===== transition « peinture qui coule » entre les pages ===== */
+.paint-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  clip-path: inset(0 0 100% 0);      /* invisible par défaut */
+}
+
+.paint-layer:nth-child(1) { background: #000; }
+.paint-layer:nth-child(2) { background: wheat; }
+.paint-layer:nth-child(3) { background: #a020f0; }
+
+/* logo au centre pendant que l'écran est couvert */
+.paint-logo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10000;
+  height: 160px;
+  width: auto;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-8deg) scale(0.6);
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.paint-overlay.is-covering .paint-logo {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(-4deg) scale(1);
+  transition: opacity 0.3s 0.5s, transform 0.4s 0.5s;
+}
+
+/* arrivée sur la nouvelle page : tout est déjà couvert, sans animation */
+html.paint-arriving .paint-layer {
+  clip-path: none;
+  transition: none;
+}
+
+html.paint-arriving .paint-logo {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(-4deg) scale(1);
+  transition: none;
+}
+
+/* accessibilité : pas d'animation si l'utilisateur l'a désactivée */
+@media (prefers-reduced-motion: reduce) {
+  .paint-overlay { display: none; }
+}
+
   /* homepage */
   .parkour {
     position: relative;
@@ -102,10 +166,10 @@
     position: relative;
     max-width: 700px;
     padding: 2rem;
-    color: wheat ;
+    color: white ;
     text-align: center;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 250px;
     border: 1px solid rgba(255, 255, 255, 0.15);
   }
   .parkour-content h1 {
@@ -115,7 +179,8 @@
     text-shadow: 3px 3px 0 #a020f0;
   }
   .parkour-content p {
-    font-family: "Permanent Marker", Arial, sans-serif;
+    font-family:'Times New Roman', Times, serif, Arial, sans-serif;
+    letter-spacing: 5px;
     font-size: 1.1rem;
     line-height: 1.7;
     margin-bottom: 1.2rem;
@@ -163,8 +228,122 @@
   }
 }
 
+
+/* cours_pages */
 /* images toujours contenues dans leur conteneur */
 img {
   max-width: 100%;
   height: auto;
   }
+
+  /* ===== carrousel de blocs ===== */
+.cours-titre {
+  text-align: center;
+  margin: 2rem 0 1rem;
+}
+
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1rem 40px 3rem;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;   /* chaque bloc s'aligne en fin de défilement */
+  scrollbar-width: none;           /* cache la barre de défilement (Firefox) */
+  flex: 1;
+}
+.carousel-item {
+  flex: 0 0 320px;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.carousel-titre {
+  margin: 0;
+  padding: 1rem 1.25rem 0.5rem;
+  font-size: 1.3rem;
+}
+
+.carousel-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  letter-spacing: 3px;
+  padding: 1rem 1.25rem 1.5rem;
+}
+
+.carousel-text p:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.carousel-link {
+  align-self: flex-start;
+  margin-top: auto;        /* colle le bouton en bas du bloc */
+  padding: 8px 20px;
+  border-radius: 8px;
+  background: #a020f0;
+  color: #fff;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+
+.carousel-link:hover {
+  transform: rotate(-3deg) scale(1.05);
+}
+
+/* page de cours */
+.cours-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+.cours-retour {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #a020f0;
+  text-decoration: none;
+}
+
+.cours-retour:hover { text-decoration: underline; }
+
+.cours-intro {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.cours-video {
+  margin: 1.5rem 0;
+}
+
+.cours-video iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 12px;
+}
+.cours-infos {
+  list-style: none;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  background: #f4eaff;
+  border-left: 4px solid #a020f0;
+  border-radius: 8px;
+}
+
+.cours-infos li + li { margin-top: 0.4rem; }
+
+.cours-body { line-height: 1.7; margin-bottom: 2rem; }
