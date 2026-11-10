@@ -169,7 +169,7 @@ html.paint-arriving .paint-logo {
     color: white ;
     text-align: center;
     background: rgba(0, 0, 0, 0.9);
-    border-radius: 250px;
+    border-radius: 150px;
     border: 1px solid rgba(255, 255, 255, 0.15);
   }
   .parkour-content h1 {
@@ -347,3 +347,201 @@ img {
 .cours-infos li + li { margin-top: 0.4rem; }
 
 .cours-body { line-height: 1.7; margin-bottom: 2rem; }
+
+
+/* ===== page actualités ===== */
+.actu-hero {
+  min-height: 50vh;
+  padding: 3rem 1rem;
+  box-sizing: border-box;
+}
+
+.evenements {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem;
+}
+
+.evenements-titre {
+  text-align: center;
+  margin: 0 0 2rem;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: #a020f0;
+}
+
+.evenements-liste {
+  display: grid;
+  gap: 24px;
+}
+
+.evenement {
+  position: relative;
+  min-height: 280px;
+  display: flex;
+  align-items: flex-end;
+  background-color: #222;            /* si aucune image n'est choisie */
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* dégradé sombre en bas pour garder le texte lisible */
+.evenement::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.25));
+}
+
+.evenement-contenu {
+  position: relative;                /* passe au-dessus du dégradé */
+  padding: 1.5rem 2rem;
+  color: #fff;
+}
+
+.evenement-contenu h3 {
+  margin: 0 0 0.25rem;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  font-size: 1.6rem;
+  text-shadow: 2px 2px 0 #a020f0;
+}
+
+.evenement-date {
+  margin: 0 0 0.75rem;
+  font-weight: bold;
+  color: #ff9ad0;
+}
+
+.evenement-contenu p {
+  line-height: 1.6;
+  margin: 0 0 0.75rem;
+}
+
+.evenement-adresse a {
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 2px solid #a020f0;
+}
+
+.evenement-adresse a:hover {
+  background: #a020f0;
+}
+
+@media (max-width: 768px) {
+  .evenement-contenu { padding: 1.25rem; }
+  .evenement { min-height: 240px; }
+}
+
+/* ===== galerie ===== */
+.galerie {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+.galerie-titre {
+  text-align: center;
+  margin: 0 0 1.5rem;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  letter-spacing: 2px;
+}
+
+/* boutons Photo / Vidéo */
+.galerie-filtres {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 2rem;
+}
+
+.galerie-filtre {
+  padding: 8px 28px;
+  border: 2px solid #a020f0;
+  border-radius: 999px;
+  color: #a020f0;
+  text-decoration: none;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  transition: transform 0.2s;
+}
+
+.galerie-filtre:hover { transform: rotate(-3deg) scale(1.05); }
+
+.galerie-filtre.actif {
+  background: #a020f0;
+  color: #fff;
+}
+
+/* grille : 3 colonnes x 3 lignes = 9 éléments */
+.galerie-grille {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.galerie-item {
+  margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.galerie-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.galerie-video iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.galerie-item figcaption {
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+}
+
+.galerie-vide {
+  text-align: center;
+  color: #777;
+}
+
+/* pagination */
+.galerie-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 2rem;
+}
+
+.galerie-pagination a {
+  min-width: 38px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  text-align: center;
+  border: 2px solid #a020f0;
+  border-radius: 8px;
+  color: #a020f0;
+  text-decoration: none;
+}
+
+.galerie-pagination a:hover,
+.galerie-pagination a.actif {
+  background: #a020f0;
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .galerie-grille { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .galerie-grille { grid-template-columns: 1fr; }
+}

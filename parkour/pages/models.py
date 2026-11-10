@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from modelcluster.fields import ParentalKey
 from wagtail.models import Page, Orderable
 from wagtail.fields import RichTextField
@@ -75,10 +76,112 @@ class CoursDetailPage(Page):
     ]
 
 class ActivitesPage(Page):
-    pass
+    parkour_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Image de fond",
+    )
+    heading = models.CharField("Titre", max_length=200, blank=True)
+    body = RichTextField("Actualités du mois", blank=True)
+    events_title = models.CharField(
+        "Titre de la section événements",
+        max_length=100,
+        default="Événements",
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel("parkour_image"),
+        FieldPanel("heading"),
+        FieldPanel("body"),
+        FieldPanel("events_title"),
+        InlinePanel("evenements", label="Événements")
+    ]
+
+class Evenement(Orderable):
+    page = ParentalKey(
+        "ActivitesPage",
+        on_delete=models.CASCADE,
+        related_name="evenements",
+    )
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Image de fond",
+    )
+    titre = models.CharField("Titre", max_length=120)
+    date = models.CharField("Date et horaire", max_length=100, blank=True)
+    texte = RichTextField("Texte", blank=True)
+    adresse = models.CharField("Adresse", max_length=250, blank=True)
+
+    panels = [
+        FieldPanel("titre"),
+        FieldPanel("date"),
+        FieldPanel("texte"),
+        FieldPanel("adresse"),
+        FieldPanel("image"),
+    ]
 
 class GaleriePage(Page):
-    pass
+    content_panels = Page.content_panels + [
+        InlinePanel("items", label="Photos et vidéos"),
+    ]
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+
+        kind = request.GET.get("type", "photo")
+        if kind not in ("photo", "video"):
+            kind = "photo"
+
+        items = self.items.filter(kind=kind)
+
+        paginator = Paginator(items, 9)
+        try:
+            page_obj = paginator.page(request.GET.get("page"))
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj =paginator.page(paginator.num_pages)
+
+        context["kind"] = kind
+        context["page_obj"] = page_obj
+        return context
+
+class GalerieItem(Orderable):
+    page = ParentalKey(
+        "GaleriePage",
+        on_delete=models.CASCADE,
+        related_name="items",
+    )
+    kind = models.CharField(
+        "Type",
+        max_length=5,
+        choices=[("photo", "Photo"), ("video", "Vidéo")],
+        default="photo",
+    )
+    titre = models.CharField("Légende", max_length=120, blank=True)
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Photo",
+    )
+    video_url = models.URLField("Lien de la vidéo (YouTube ou Vimeo)", blank=True)
+
+    panels = [
+        FieldPanel("kind"),
+        FieldPanel("titre"),
+        FieldPanel("image"),
+        FieldPanel("video_url"),
+    ]
 
 class SocialPage(Page):
     pass

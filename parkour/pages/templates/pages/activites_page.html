@@ -1,7 +1,53 @@
 {% extends "base.html" %}
 {% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
 
 {% block content %}
 
+{# ===== Encadré d'actualités ===== #}
+{% if page.parkour_image %}
+  {% image page.parkour_image fill-1920x1080 as bg %}
+  <section class="parkour actu-hero" style="background-image: url('{{ bg.url }}');">
+{% else %}
+  <section class="parkour actu-hero" style="background-image: url('{% static 'img/parkourparis.png' %}');">
+{% endif %}
+  <div class="parkour-content">
+    <h1>{% if page.heading %}{{ page.heading }}{% else %}{{ page.title }}{% endif %}</h1>
+    {{ page.body|richtext }}
+  </div>
+</section>
+
+{# ===== Événements ===== #}
+{% if page.evenements.all %}
+<section class="evenements">
+  <h2 class="evenements-titre">{{ page.events_title }}</h2>
+
+  <div class="evenements-liste">
+    {% for ev in page.evenements.all %}
+      {% if ev.image %}
+        {% image ev.image fill-1200x600 as ev_bg %}
+        <article class="evenement" style="background-image: url('{{ ev_bg.url }}');">
+      {% else %}
+        <article class="evenement">
+      {% endif %}
+        <div class="evenement-contenu">
+          <h3>{{ ev.titre }}</h3>
+          {% if ev.date %}<p class="evenement-date">{{ ev.date }}</p>{% endif %}
+          {{ ev.texte|richtext }}
+          {% if ev.adresse %}
+            <p class="evenement-adresse">
+              <a href="https://www.google.com/maps/search/?api=1&query={{ ev.adresse|urlencode }}">
+                📍 {{ ev.adresse }}
+              </a>
+            </p>
+          {% endif %}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
 
 {% endblock content %}

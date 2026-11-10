@@ -1,7 +1,55 @@
 {% extends "base.html" %}
 {% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load wagtailembeds_tags %}
 
 {% block content %}
+<section class="galerie">
+  <h1 class="galerie-titre">{{ page.title }}</h1>
 
+  {# ===== boutons Photo / Vidéo ===== #}
+  <div class="galerie-filtres">
+    <a href="?type=photo" class="galerie-filtre {% if kind == 'photo' %}actif{% endif %}">Photo</a>
+    <a href="?type=video" class="galerie-filtre {% if kind == 'video' %}actif{% endif %}">Vidéo</a>
+  </div>
+
+  {# ===== grille de 9 éléments ===== #}
+  {% if page_obj %}
+    <div class="galerie-grille">
+      {% for item in page_obj %}
+        <figure class="galerie-item">
+          {% if kind == 'photo' and item.image %}
+            {% image item.image fill-600x400 %}
+          {% elif kind == 'video' and item.video_url %}
+            <div class="galerie-video">{% embed item.video_url %}</div>
+          {% endif %}
+          {% if item.titre %}
+            <figcaption>{{ item.titre }}</figcaption>
+          {% endif %}
+        </figure>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="galerie-vide">Rien à afficher pour le moment.</p>
+  {% endif %}
+
+  {# ===== pagination ===== #}
+  {% if page_obj.paginator.num_pages > 1 %}
+    <nav class="galerie-pagination" aria-label="Pages de la galerie">
+      {% if page_obj.has_previous %}
+        <a href="?type={{ kind }}&page={{ page_obj.previous_page_number }}">&lsaquo;</a>
+      {% endif %}
+
+      {% for n in page_obj.paginator.page_range %}
+        <a href="?type={{ kind }}&page={{ n }}" {% if n == page_obj.number %}class="actif"{% endif %}>{{ n }}</a>
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a href="?type={{ kind }}&page={{ page_obj.next_page_number }}">&rsaquo;</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+</section>
 
 {% endblock content %}
