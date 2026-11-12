@@ -1,58 +1,75 @@
 {% load static %}
 {% load wagtailcore_tags %}
-{% load wagtailuserbar%}
+{% load parkour_tags %}
 
 <!DOCTYPE html>
 <html lang="fr">
-    <meta charset="utf-8" />
+<head>
+  <meta charset="utf-8" />
   <title>{% block title %}{{ page.title }}{% endblock %} - Parkour</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="{% static 'css/home_page.css' %}">
-<script>
-  try {
-    if (sessionStorage.getItem('paint')) {
-      sessionStorage.removeItem('paint');
-      document.documentElement.classList.add('paint-arriving');
-    }
-  } catch (e) {}
-</script>
+  <script>
+    try {
+      if (sessionStorage.getItem('paint')) {
+        sessionStorage.removeItem('paint');
+        document.documentElement.classList.add('paint-arriving');
+      }
+    } catch (e) {}
+  </script>
   {% block extra_css %}{% endblock %}
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
-<div class="paint-overlay" aria-hidden="true">
-  <div class="paint-layer"></div>
-  <div class="paint-layer"></div>
-  <div class="paint-layer"></div>
-  <img class="paint-logo" src="{% static 'img/logo.png' %}" alt="">
-</div>
-<header class="site-header">
-        <a href="/" class="logo">
-             <img src="{% static "img/logo.png" %}" alt="Logo Parkour">
-         </a>
-    <nav>
-        <ul>
-            <li> <a href="/">Accueil</a></li>
-            <li> <a href="/cours/">Cours</a></li>
-            <li> <a href="/activites/">Activités</a></li>  
-            <li> <a href="/galerie/">Galerie</a></li>
-        </ul>
-    <nav>
-</header>
-    <main>
-        {% block content %}{% endblock %}
-    </main>
 
-     <footer class="site-footer">
+  <div class="paint-overlay" aria-hidden="true">
+    <div class="paint-layer"></div>
+    <div class="paint-layer"></div>
+    <div class="paint-layer"></div>
+    <img class="paint-logo" src="{% static 'img/logo.png' %}" alt="">
+  </div>
+
+  <header class="site-header">
     <a href="/" class="logo">
-        <img src="{% static "img/logo.png" %}" alt="Logo Parkour">
+      <img src="{% static 'img/logo.png' %}" alt="Logo Parkour">
     </a>
-    <a href="/social/">Réseaux sociaux</a>
+
+    <nav>
+      <ul>
+        <li><a href="/">Accueil</a></li>
+        <li><a href="/cours/">Cours</a></li>
+        <li><a href="/activites/">Activités</a></li>
+        <li><a href="/galerie/">Galerie</a></li>
+      </ul>
+    </nav>
+
+    <a href="/contact/" class="btn-contact">Contact</a>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <a href="/" class="logo">
+      <img src="{% static 'img/logo.png' %}" alt="Logo Parkour">
+    </a>
+
+    {% reseaux_sociaux as reseaux %}
+    {% if reseaux %}
+      <div class="footer-social">
+        {% for r in reseaux %}
+          <a href="{{ r.url }}">{{ r.nom }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
     <a href="/a-propos/">À propos</a>
     <a href="/mentions-legales/">Mentions légales</a>
     <a href="/contact/" class="btn-contact">Contact</a>
   </footer>
+
 <script>
   (function () {
     var root = document.documentElement;

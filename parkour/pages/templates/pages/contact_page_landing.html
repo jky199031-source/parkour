@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<section class="contact">
+  <h1 class="contact-titre">{{ page.title }}</h1>
+  <div class="contact-merci">
+    {% if page.thank_you_text %}
+      {{ page.thank_you_text|richtext }}
+    {% else %}
+      <p>Merci, votre message a bien été envoyé.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock content %}

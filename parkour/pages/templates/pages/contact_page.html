@@ -1,7 +1,43 @@
 {% extends "base.html" %}
 {% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
+<section class="contact">
+  <h1 class="contact-titre">{{ page.title }}</h1>
 
+  <div class="contact-grille">
+    <div class="contact-image">
+      {% if page.image %}
+        {% image page.image fill-900x600 %}
+      {% endif %}
+    </div>
+
+    <div class="contact-formulaire">
+      <h2>Contactez-nous</h2>
+
+      {% if page.intro %}
+        <div class="contact-intro">{{ page.intro|richtext }}</div>
+      {% endif %}
+
+      <form action="{% pageurl page %}" method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+          <div class="contact-champ">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+            {% for error in field.errors %}
+              <p class="contact-erreur">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endfor %}
+
+        <button type="submit" class="carousel-link">Envoyer</button>
+      </form>
+    </div>
+  </div>
+</section>
 
 {% endblock content %}

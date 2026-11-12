@@ -3,7 +3,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from modelcluster.fields import ParentalKey
 from wagtail.models import Page, Orderable
 from wagtail.fields import RichTextField
-from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.admin.panels import FieldPanel, InlinePanel,MultiFieldPanel, FieldRowPanel
+from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
+from wagtail.snippets.models import register_snippet
 
 class CoursPage(Page):
     content_panels = Page.content_panels + [
@@ -182,9 +184,28 @@ class GalerieItem(Orderable):
         FieldPanel("image"),
         FieldPanel("video_url"),
     ]
-
 class SocialPage(Page):
     pass
+
+@register_snippet
+class ReseauSocial(models.Model):
+    nom = models.CharField("Nom du réseau", max_length=50)
+    url = models.URLField("Adresse de votre profil")
+    ordre = models.PositiveIntegerField("Ordre d'affichage", default=0)
+
+    panels = [
+        FieldPanel("nom"),
+        FieldPanel("url"),
+        FieldPanel("ordre"),
+    ]
+
+    class Meta:
+        ordering = ["ordre", "nom"]
+        verbose_name = "réseau social"
+        verbose_name_plural = "réseaux sociaux"
+
+    def __str__(self):
+        return self.nom
 
 class AboutPage(Page):
     pass
@@ -192,5 +213,39 @@ class AboutPage(Page):
 class LegalPage(Page):
     pass
 
-class ContactPage(Page):
-    pass
+class ContactFormField(AbstractFormField):
+    page = ParentalKey(
+        "ContactPage",
+        on_delete=models.CASCADE,
+        related_name="form_fields",
+    )
+
+
+class ContactPage(AbstractEmailForm):
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Image",
+    )
+    intro = RichTextField("Texte d'introduction", blank=True)
+    thank_you_text = RichTextField("Message de remerciement", blank=True)
+
+    content_panels = AbstractEmailForm.content_panels + [
+        FieldPanel("image"),
+        FieldPanel("intro"),
+        InlinePanel("form_fields", label="Champs du formulaire"),
+        FieldPanel("thank_you_text"),
+        MultiFieldPanel(
+            [
+                FieldRowPanel([
+                    FieldPanel("from_address"),
+                    FieldPanel("to_address"),
+                ]),
+                FieldPanel("subject"),
+            ],
+            "Envoi par e-mail",
+        ),
+    ]

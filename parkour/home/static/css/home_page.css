@@ -49,6 +49,13 @@ main {
   margin-left: auto;     
 }
 
+.footer-social {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
 .btn-contact {
   margin-left: auto;
   padding: 8px 20px;
@@ -186,6 +193,58 @@ html.paint-arriving .paint-logo {
     margin-bottom: 1.2rem;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
   }
+
+  /* ===== accueil en escalier ===== */
+.escalier {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.escalier-ligne {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+/* une ligne sur deux : l'image passe à gauche */
+.escalier-ligne:nth-child(even) .escalier-image {
+  order: -1;
+}
+
+.escalier-texte h2 {
+  margin: 0 0 1rem;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  font-size: 2rem;
+  color: #a020f0;
+}
+
+.escalier-texte p {
+  line-height: 1.7;
+}
+
+.escalier-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 8px 8px 0 #a020f0;      /* ombre violette façon sticker */
+}
+
+@media (max-width: 768px) {
+  .escalier-ligne {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .escalier-ligne .escalier-image,
+  .escalier-ligne:nth-child(even) .escalier-image {
+    order: -1;                        /* sur téléphone : image au-dessus du texte */
+  }
+}
 
 
   @media (max-width: 768px) {
@@ -544,4 +603,110 @@ img {
 
 @media (max-width: 560px) {
   .galerie-grille { grid-template-columns: 1fr; }
+}
+
+
+/* Page contact */
+
+/* ===== page contact ===== */
+/* ===== page contact ===== */
+.contact {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+.contact-titre {
+  text-align: center;
+  margin: 0 0 2rem;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  letter-spacing: 2px;
+}
+
+.contact-grille {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;            /* centre l'image et le formulaire verticalement */
+}
+
+.contact-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+}
+
+.contact-formulaire {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;                 /* centre le formulaire dans sa colonne */
+}
+
+.contact-formulaire h2 {
+  margin-top: 0;
+  text-align: center;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  color: #a020f0;
+}
+
+.contact-intro {
+  text-align: center;
+}
+
+.contact-champ {
+  margin-bottom: 1.1rem;
+}
+
+.contact-champ label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: bold;
+}
+
+.contact-champ input,
+.contact-champ textarea,
+.contact-champ select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.contact-champ input:focus,
+.contact-champ textarea:focus {
+  outline: none;
+  border-color: #a020f0;
+}
+
+.contact-champ textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.contact-erreur {
+  margin: 0.3rem 0 0;
+  color: #d0021b;
+  font-size: 0.9rem;
+}
+
+.contact-formulaire button {
+  display: block;
+  margin: 1.5rem auto 0;          /* bouton « Envoyer » centré */
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.contact-merci {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1.15rem;
+}
+
+@media (max-width: 768px) {
+  .contact-grille { grid-template-columns: 1fr; }
 }

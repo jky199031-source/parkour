@@ -5,22 +5,23 @@
 
 {% block content %}
 
-{% if page.parkour_image %}
-    {% image page.parkour_image fill-1920x1080 as bg %}
-      <section class="parkour" style="background-image: url('{{ bg.url }}');">
-    {% else %}
-       <section class="parkour" style="background-image: url('{% static 'img/parkourparis.png' %}');">
-    {% endif %}
 
-     <div class="parkour-content">
-    {% if page.heading %}
-      <h1>{{ page.heading }}</h1>
-    {% else %}
-      <h1>{{ page.title }}</h1>
-    {% endif %}
-
-    {{ page.body|richtext }}
-  </div>
-</section>
-
+{# ===== sections en escalier ===== #}
+{% if page.sections.all %}
+<div class="escalier">
+  {% for s in page.sections.all %}
+    <section class="escalier-ligne">
+      <div class="escalier-texte">
+        {% if s.titre %}<h2>{{ s.titre }}</h2>{% endif %}
+        {{ s.texte|richtext }}
+      </div>
+      <div class="escalier-image">
+        {% if s.image %}
+          {% image s.image fill-800x600 %}
+        {% endif %}
+      </div>
+    </section>
+  {% endfor %}
+</div>
+{% endif %}
 {% endblock content %}
