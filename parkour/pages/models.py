@@ -261,7 +261,11 @@ class Valeur(Orderable):
     ]
 
 class LegalPage(Page):
-    pass
+    body = RichTextField("Contenu", blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel("body"),
+    ]
 
 class ContactFormField(AbstractFormField):
     page = ParentalKey(

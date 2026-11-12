@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
+{% load wagtailcore_tags %}
 
 {% block content %}
-
-
+<article class="legal">
+    <h1>{{ page.title }}</h1>
+    <div class="legal-texte">
+        {{ page.body|richtext }}
+    </div>
+</article>
 {% endblock content %}

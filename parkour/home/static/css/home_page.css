@@ -813,3 +813,28 @@ img {
   .apropos-image { order: -1; }       /* sur téléphone : image au-dessus du texte */
   .apropos-bandeau h1 { font-size: 1.8rem; }
 }
+
+/* ===== mentions légales ===== */
+.legal {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+.legal h1 {
+  text-align: center;
+  margin: 0 0 2rem;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  letter-spacing: 2px;
+  color: #a020f0;
+}
+
+.legal-texte h2,
+.legal-texte h3 {
+  margin: 2rem 0 0.5rem;
+}
+
+.legal-texte p,
+.legal-texte li {
+  line-height: 1.7;
+}
