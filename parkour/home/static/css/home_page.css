@@ -116,9 +116,9 @@ main {
   clip-path: inset(0 0 100% 0);      /* invisible par défaut */
 }
 
-.paint-layer:nth-child(1) { background: #000; }
+.paint-layer:nth-child(1) { background: #a020f0; }
 .paint-layer:nth-child(2) { background: wheat; }
-.paint-layer:nth-child(3) { background: #a020f0; }
+.paint-layer:nth-child(3) { background: #000; }
 
 /* logo au centre pendant que l'écran est couvert */
 .paint-logo {
