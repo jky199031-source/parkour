@@ -208,7 +208,57 @@ class ReseauSocial(models.Model):
         return self.nom
 
 class AboutPage(Page):
-    pass
+    banner_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Image du bandeau",
+    )
+    who_title = models.CharField(
+        "Titre de la présentation",
+        max_length=120,
+        default="Qui sommes-nous ?",
+    )
+    who_text = RichTextField("Texte de présentation",blank=True)
+    who_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Image de présentation",
+    )
+    values_title = models.CharField(
+        "Titre de la section valeurs",
+        max_length=120,
+        default="Nos valeurs",
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel("banner_image"),
+        FieldPanel("who_title"),
+        FieldPanel("who_text"),
+        FieldPanel("who_image"),
+        FieldPanel("values_title"),
+        InlinePanel("valeurs", label="Valeurs")
+    ]
+
+
+class Valeur(Orderable):
+    page = ParentalKey(
+        "AboutPage",
+        on_delete=models.CASCADE,
+        related_name="valeurs",
+    )
+    titre = models.CharField("Titre", max_length=80)
+    texte = models.CharField("Texte court", max_length=250, blank=True)
+
+    panels = [
+        FieldPanel("titre"),
+        FieldPanel("texte"),
+    ]
 
 class LegalPage(Page):
     pass

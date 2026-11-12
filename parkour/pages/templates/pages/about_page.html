@@ -1,7 +1,51 @@
 {% extends "base.html" %}
 {% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
 
 {% block content %}
 
+
+{# ===== bandeau ===== #}
+{% if page.banner_image %}
+  {% image page.banner_image fill-1920x400 as bnr %}
+  <section class="apropos-bandeau" style="background-image: url('{{ bnr.url }}');">
+{% else %}
+  <section class="apropos-bandeau">
+{% endif %}
+  <h1>{{ page.title }}</h1>
+</section>
+
+<div class="apropos">
+
+  {# ===== qui sommes-nous ? ===== #}
+  <section class="apropos-presentation">
+    <div class="apropos-texte">
+      <h2>{{ page.who_title }}</h2>
+      {{ page.who_text|richtext }}
+    </div>
+    <div class="apropos-image">
+      {% if page.who_image %}
+        {% image page.who_image fill-800x600 %}
+      {% endif %}
+    </div>
+  </section>
+
+  {# ===== nos valeurs ===== #}
+  {% if page.valeurs.all %}
+  <section class="apropos-valeurs">
+    <h2>{{ page.values_title }}</h2>
+    <div class="valeurs-grille">
+      {% for v in page.valeurs.all %}
+        <article class="valeur-carte">
+          <h3>{{ v.titre }}</h3>
+          {% if v.texte %}<p>{{ v.texte }}</p>{% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+</div>
 
 {% endblock content %}

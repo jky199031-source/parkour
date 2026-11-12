@@ -710,3 +710,106 @@ img {
 @media (max-width: 768px) {
   .contact-grille { grid-template-columns: 1fr; }
 }
+
+
+/* ===== page à propos ===== */
+.apropos-bandeau {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  background-color: #222;            /* si aucune image n'est choisie */
+  background-size: cover;
+  background-position: center;
+}
+
+.apropos-bandeau::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.apropos-bandeau h1 {
+  position: relative;
+  margin: 0;
+  color: #fff;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 3px;
+  text-shadow: 3px 3px 0 #a020f0;
+}
+
+.apropos {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+}
+
+.apropos-presentation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.apropos-texte h2,
+.apropos-valeurs h2 {
+  margin: 0 0 1rem;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  color: #a020f0;
+}
+
+.apropos-texte p {
+  line-height: 1.7;
+}
+
+.apropos-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 8px 8px 0 #a020f0;
+}
+
+.apropos-valeurs {
+  margin-top: 4rem;
+}
+
+.apropos-valeurs h2 {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.valeurs-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.valeur-carte {
+  padding: 1.5rem;
+  text-align: center;
+  background: #f4eaff;
+  border-radius: 12px;
+  border-top: 4px solid #a020f0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.valeur-carte h3 {
+  margin: 0 0 0.5rem;
+  font-family: "Permanent Marker", Arial, sans-serif;
+  color: #a020f0;
+}
+
+.valeur-carte p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .apropos-presentation { grid-template-columns: 1fr; gap: 24px; }
+  .apropos-image { order: -1; }       /* sur téléphone : image au-dessus du texte */
+  .apropos-bandeau h1 { font-size: 1.8rem; }
+}
