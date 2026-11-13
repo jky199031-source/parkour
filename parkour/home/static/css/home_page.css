@@ -12,6 +12,7 @@ main {
 
   /* header */
   .logo img {
+    margin-top: 20px;
     height: 85px;
     width:auto;
     display:block
@@ -410,6 +411,9 @@ img {
 
 /* ===== page actualités ===== */
 .actu-hero {
+  margin-top: 20px;
+  display: flex;
+  border-radius: 500px;
   min-height: 50vh;
   padding: 3rem 1rem;
   box-sizing: border-box;
