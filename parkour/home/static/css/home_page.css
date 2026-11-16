@@ -170,15 +170,21 @@ html.paint-arriving .paint-logo {
     background-repeat: no-repeat;
   }
 
+  .parkour::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.50); /* 0.45 = 45% d'opacité, ajustez selon vos goûts */
+    z-index: 1;
+  }
   .parkour-content {
     position: relative;
+    z-index: 2;
     max-width: 700px;
     padding: 2rem;
     color: white ;
     text-align: center;
-    background: rgba(0, 0, 0, 0.9);
-    border-radius: 150px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-weight: bold;
   }
   .parkour-content h1 {
     font-family: "Permanent Marker", Arial, sans-serif;
@@ -722,7 +728,8 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 160px;
+  min-height: 80px;
+  margin-top: 30px;
   background-color: #222;            /* si aucune image n'est choisie */
   background-size: cover;
   background-position: center;
